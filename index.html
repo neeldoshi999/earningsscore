@@ -255,6 +255,8 @@ const RAW = {
 };
 
 let unit='Mn', currentMetrics=[], actuals={}, customRows=[], aiFilled={}, pendingExtracted={};
+const ANTHROPIC_API_KEY = '';
+
 
 function setStatus(msg, type){
   const p = document.getElementById('statusPill');
@@ -321,11 +323,25 @@ function fmtVal(v,mu){
 function getBeat(){return parseFloat(document.getElementById('beatThr').value)||2;}
 function getMiss(){return parseFloat(document.getElementById('missThr').value)||2;}
 
+function toBaseMn(v, mu){
+  if(mu==='%'||mu==='spec') return parseFloat(v);
+  const n = parseFloat(v);
+  if(unit==='Mn') return n;
+  if(unit==='Bn') return n*1000;
+  if(unit==='Cr') return n*10;
+  return n;
+}
+
 function calcDev(est,actual,mu){
-  const a=parseFloat(actual),e=parseFloat(est);
-  if(isNaN(a)||isNaN(e)||e===0) return null;
-  if(mu==='%') return a-e;
-  return ((a-e)/Math.abs(e))*100;
+  if(mu==='%'){
+    const a=parseFloat(actual), e=parseFloat(est);
+    if(isNaN(a)||isNaN(e)) return null;
+    return a-e;
+  }
+  const aBase=toBaseMn(actual,mu);
+  const eBase=parseFloat(est);
+  if(isNaN(aBase)||isNaN(eBase)||eBase===0) return null;
+  return ((aBase-eBase)/Math.abs(eBase))*100;
 }
 
 function getBadge(dev,mu){
@@ -447,12 +463,11 @@ async function handlePDF(input){
     const company=document.getElementById('companySel').value;
     const allRows=[...currentMetrics,...customRows];
     const prompt=buildPrompt(text,company,allRows);
+    const headers = {'Content-Type':'application/json','anthropic-dangerous-direct-browser-access':'true'};
+    if(ANTHROPIC_API_KEY) headers['x-api-key'] = ANTHROPIC_API_KEY;
     const resp=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'anthropic-dangerous-direct-browser-access':'true'
-      },
+      headers,
       body:JSON.stringify({
         model:'claude-sonnet-4-20250514',
         max_tokens:1000,
