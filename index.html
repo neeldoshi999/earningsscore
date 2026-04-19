@@ -463,11 +463,12 @@ async function handlePDF(input){
     const company=document.getElementById('companySel').value;
     const allRows=[...currentMetrics,...customRows];
     const prompt=buildPrompt(text,company,allRows);
-    const headers = {'Content-Type':'application/json','anthropic-dangerous-direct-browser-access':'true'};
-    if(ANTHROPIC_API_KEY) headers['x-api-key'] = ANTHROPIC_API_KEY;
     const resp=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
-      headers,
+      headers:{
+        'Content-Type':'application/json',
+        'anthropic-dangerous-direct-browser-access':'true'
+      },
       body:JSON.stringify({
         model:'claude-sonnet-4-20250514',
         max_tokens:1000,
