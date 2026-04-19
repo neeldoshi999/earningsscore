@@ -2,92 +2,160 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:system-ui,sans-serif;font-size:14px;color:var(--color-text-primary,#1a1a1a);background:transparent}
-.hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:0.5px solid var(--color-border-tertiary,#e0e0e0);flex-wrap:wrap;gap:8px}
-.title{font-size:16px;font-weight:500}
-.controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-select{padding:5px 8px;border:0.5px solid var(--color-border-secondary,#bbb);border-radius:6px;background:var(--color-background-primary,#fff);color:var(--color-text-primary,#1a1a1a);font-size:13px;cursor:pointer}
-.unit-btns{display:flex;gap:0;border:0.5px solid var(--color-border-secondary,#bbb);border-radius:6px;overflow:hidden}
-.unit-btn{padding:5px 12px;font-size:12px;cursor:pointer;border:none;background:var(--color-background-secondary,#f5f5f5);color:var(--color-text-secondary,#666)}
-.unit-btn.active{background:var(--color-text-primary,#1a1a1a);color:var(--color-background-primary,#fff)}
-.threshold-row{display:flex;align-items:center;gap:8px;padding:6px 16px;font-size:12px;color:var(--color-text-secondary,#666);background:var(--color-background-secondary,#f5f5f5);border-bottom:0.5px solid var(--color-border-tertiary,#e0e0e0);flex-wrap:wrap}
-.threshold-row input[type=number]{width:55px;padding:3px 6px;font-size:12px;border:0.5px solid var(--color-border-secondary,#bbb);border-radius:4px;text-align:center;background:var(--color-background-primary,#fff);color:var(--color-text-primary,#1a1a1a)}
-.upload-bar{display:flex;align-items:center;gap:10px;padding:8px 16px;border-bottom:0.5px solid var(--color-border-tertiary,#e0e0e0);flex-wrap:wrap}
-.upload-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;font-size:12px;border:0.5px solid var(--color-border-secondary,#bbb);border-radius:6px;background:var(--color-background-primary,#fff);color:var(--color-text-primary,#1a1a1a);cursor:pointer;white-space:nowrap}
-.upload-btn:hover{background:var(--color-background-secondary,#f5f5f5)}
-.upload-btn svg{flex-shrink:0}
+body{font-family:system-ui,-apple-system,sans-serif;font-size:14px;color:var(--color-text-primary,#1a1a1a);background:var(--color-background-tertiary,#f5f5f3);min-height:100vh}
+
+/* ── top bar ── */
+.topbar{background:var(--color-background-primary,#fff);border-bottom:0.5px solid var(--color-border-tertiary,#e0e0e0);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:8px;position:sticky;top:0;z-index:10}
+.topbar-title{font-size:15px;font-weight:500;white-space:nowrap}
+.qtr-badge{font-size:11px;padding:2px 8px;background:#E6F1FB;color:#185FA5;border-radius:4px;font-weight:500;white-space:nowrap}
+
+/* ── selectors row ── */
+.selectors{background:var(--color-background-primary,#fff);padding:10px 16px;display:flex;gap:8px;border-bottom:0.5px solid var(--color-border-tertiary,#e0e0e0);flex-wrap:wrap}
+select{flex:1;min-width:130px;padding:8px 10px;border:0.5px solid var(--color-border-secondary,#bbb);border-radius:8px;background:var(--color-background-primary,#fff);color:var(--color-text-primary,#1a1a1a);font-size:13px;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23888' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px}
+
+/* ── toolbar ── */
+.toolbar{background:var(--color-background-primary,#fff);padding:8px 16px;display:flex;align-items:center;gap:8px;border-bottom:0.5px solid var(--color-border-tertiary,#e0e0e0);flex-wrap:wrap}
+.unit-btns{display:flex;border:0.5px solid var(--color-border-secondary,#bbb);border-radius:8px;overflow:hidden}
+.unit-btn{padding:7px 14px;font-size:12px;font-weight:500;cursor:pointer;border:none;background:var(--color-background-secondary,#f5f5f5);color:var(--color-text-secondary,#666);transition:background .15s,color .15s;white-space:nowrap}
+.unit-btn.active{background:var(--color-text-primary,#1a1a1a);color:#fff}
+.thr-row{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--color-text-secondary,#666);flex-wrap:wrap}
+.thr-row input{width:44px;padding:4px 6px;font-size:12px;border:0.5px solid var(--color-border-secondary,#bbb);border-radius:6px;text-align:center;background:var(--color-background-primary,#fff);color:var(--color-text-primary,#1a1a1a)}
+
+/* ── upload bar ── */
+.upload-bar{background:var(--color-background-primary,#fff);padding:10px 16px;display:flex;align-items:center;gap:10px;border-bottom:0.5px solid var(--color-border-tertiary,#e0e0e0);flex-wrap:wrap}
+.upload-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;font-size:13px;border:0.5px solid var(--color-border-secondary,#bbb);border-radius:8px;background:var(--color-background-primary,#fff);color:var(--color-text-primary,#1a1a1a);cursor:pointer;white-space:nowrap;-webkit-tap-highlight-color:transparent}
+.upload-btn:active{background:var(--color-background-secondary,#f5f5f5)}
 #pdfFileInput{display:none}
-.status-pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:500}
+.status-pill{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:20px;font-size:12px;font-weight:500;flex-shrink:0}
 .status-idle{background:var(--color-background-secondary,#f5f5f5);color:var(--color-text-secondary,#666)}
 .status-loading{background:#E6F1FB;color:#185FA5}
 .status-done{background:#EAF3DE;color:#3B6D11}
 .status-err{background:#FCEBEB;color:#A32D2D}
 .spinner{width:12px;height:12px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
 @keyframes spin{to{transform:rotate(360deg)}}
-.extracted-preview{margin:0 16px 8px;padding:10px 12px;border:0.5px solid var(--color-border-secondary,#bbb);border-radius:8px;font-size:12px;background:var(--color-background-secondary,#f5f5f5);display:none}
-.extracted-preview h4{font-size:12px;font-weight:500;margin-bottom:6px;color:var(--color-text-secondary,#666)}
-.extracted-preview .ext-row{display:flex;justify-content:space-between;align-items:center;padding:3px 0;border-bottom:0.5px solid var(--color-border-tertiary,#e0e0e0)}
-.extracted-preview .ext-row:last-child{border-bottom:none}
-.ext-match{color:#1D9E75;font-size:11px}
-.ext-nomatch{color:#888;font-size:11px}
-.apply-btn{padding:5px 14px;font-size:12px;border:none;border-radius:6px;background:#1D9E75;color:#fff;cursor:pointer;margin-top:8px}
-.apply-btn:hover{background:#0F6E56}
-.table-wrap{overflow-x:auto;padding:0 0 8px}
-table{width:100%;border-collapse:collapse;min-width:640px}
-thead th{padding:8px 10px;font-size:11px;font-weight:500;color:var(--color-text-secondary,#666);text-align:right;border-bottom:0.5px solid var(--color-border-tertiary,#e0e0e0);white-space:nowrap;text-transform:uppercase;letter-spacing:.3px}
-thead th:first-child{text-align:left}
-tbody tr{border-bottom:0.5px solid var(--color-border-tertiary,#e0e0e0)}
-tbody tr:hover{background:var(--color-background-secondary,#f9f9f9)}
-td{padding:8px 10px;text-align:right;font-size:13px;vertical-align:middle}
-td:first-child{text-align:left}
-.metric{font-weight:500}
-.est{color:var(--color-text-secondary,#666)}
-.actual-input{width:90px;padding:4px 6px;border:0.5px solid var(--color-border-secondary,#bbb);border-radius:4px;font-size:13px;text-align:right;background:var(--color-background-primary,#fff);color:var(--color-text-primary,#1a1a1a)}
-.actual-input:focus{outline:none;border-color:#378ADD}
+
+/* ── extracted preview ── */
+.ext-preview{margin:12px 16px;padding:12px;border:0.5px solid var(--color-border-secondary,#bbb);border-radius:10px;font-size:13px;background:var(--color-background-primary,#fff);display:none}
+.ext-preview h4{font-size:12px;font-weight:500;margin-bottom:8px;color:var(--color-text-secondary,#666)}
+.ext-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary,#e0e0e0);gap:8px;flex-wrap:wrap}
+.ext-row:last-child{border-bottom:none}
+.ext-match{color:#1D9E75;font-size:11px;white-space:nowrap}
+.btn-apply{padding:8px 16px;font-size:13px;border:none;border-radius:8px;background:#1D9E75;color:#fff;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.btn-apply:active{background:#0F6E56}
+.btn-dismiss{padding:8px 16px;font-size:13px;border:0.5px solid var(--color-border-secondary,#bbb);border-radius:8px;background:transparent;color:var(--color-text-secondary,#666);cursor:pointer}
+
+/* ── CARDS layout (mobile) ── */
+.cards-wrap{padding:12px 16px;display:flex;flex-direction:column;gap:10px}
+.metric-card{background:var(--color-background-primary,#fff);border-radius:12px;border:0.5px solid var(--color-border-tertiary,#e0e0e0);padding:12px 14px}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:8px}
+.card-metric{font-weight:500;font-size:14px;flex:1}
+.card-unit{font-size:11px;color:var(--color-text-secondary,#666);margin-left:4px}
+.card-ai{font-size:10px;color:#534AB7;margin-left:4px}
+.card-body{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.card-field{display:flex;flex-direction:column;gap:4px}
+.card-label{font-size:11px;color:var(--color-text-secondary,#666);text-transform:uppercase;letter-spacing:.4px}
+.card-est{font-size:15px;font-weight:500;color:var(--color-text-primary,#1a1a1a)}
+.actual-input{width:100%;padding:8px 10px;border:0.5px solid var(--color-border-secondary,#bbb);border-radius:8px;font-size:15px;background:var(--color-background-primary,#fff);color:var(--color-text-primary,#1a1a1a);-webkit-appearance:none}
+.actual-input:focus{outline:none;border-color:#378ADD;border-width:1.5px}
 .actual-input.has-val{border-color:#1D9E75}
 .actual-input.ai-filled{border-color:#8B7FDD;background:#EEEDFE22}
-.devpct{font-weight:500;font-size:13px}
-.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:500;white-space:nowrap}
+.card-footer{margin-top:10px;display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:0.5px solid var(--color-border-tertiary,#e0e0e0)}
+.devpct{font-weight:500;font-size:14px}
+.badge{display:inline-block;padding:3px 10px;border-radius:5px;font-size:12px;font-weight:500}
 .beat{background:#EAF3DE;color:#3B6D11}
-.inline{background:#FAEEDA;color:#854F0B}
+.inline-b{background:#FAEEDA;color:#854F0B}
 .miss{background:#FCEBEB;color:#A32D2D}
 .na{color:var(--color-text-tertiary,#aaa);font-size:12px}
-.add-btn{margin:8px 16px;padding:5px 12px;font-size:12px;border:0.5px dashed var(--color-border-secondary,#bbb);border-radius:6px;background:transparent;color:var(--color-text-secondary,#666);cursor:pointer}
-.add-btn:hover{background:var(--color-background-secondary,#f5f5f5)}
-.qtr-badge{display:inline-block;font-size:11px;padding:2px 8px;background:#E6F1FB;color:#185FA5;border-radius:4px;font-weight:500}
-.ai-dot{width:8px;height:8px;border-radius:50%;background:#534AB7;display:inline-block;flex-shrink:0}
+
+/* ── TABLE layout (tablet+) ── */
+.table-wrap{display:none;overflow-x:auto;padding:12px 16px}
+table{width:100%;border-collapse:collapse;background:var(--color-background-primary,#fff);border-radius:12px;overflow:hidden;border:0.5px solid var(--color-border-tertiary,#e0e0e0)}
+thead th{padding:10px 12px;font-size:11px;font-weight:500;color:var(--color-text-secondary,#666);text-align:right;background:var(--color-background-secondary,#f9f9f7);border-bottom:0.5px solid var(--color-border-tertiary,#e0e0e0);white-space:nowrap;text-transform:uppercase;letter-spacing:.3px}
+thead th:first-child{text-align:left}
+tbody tr{border-bottom:0.5px solid var(--color-border-tertiary,#e0e0e0)}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:var(--color-background-secondary,#f9f9f7)}
+td{padding:10px 12px;text-align:right;font-size:13px;vertical-align:middle}
+td:first-child{text-align:left}
+.tbl-metric{font-weight:500}
+.tbl-est{color:var(--color-text-secondary,#666)}
+.tbl-input{width:100px;padding:5px 8px;border:0.5px solid var(--color-border-secondary,#bbb);border-radius:6px;font-size:13px;text-align:right;background:var(--color-background-primary,#fff);color:var(--color-text-primary,#1a1a1a)}
+.tbl-input:focus{outline:none;border-color:#378ADD}
+.tbl-input.has-val{border-color:#1D9E75}
+.tbl-input.ai-filled{border-color:#8B7FDD;background:#EEEDFE22}
+
+/* ── add btn ── */
+.add-btn{display:block;margin:4px 16px 16px;padding:10px;font-size:13px;border:0.5px dashed var(--color-border-secondary,#bbb);border-radius:10px;background:transparent;color:var(--color-text-secondary,#666);cursor:pointer;width:calc(100% - 32px);text-align:center;-webkit-tap-highlight-color:transparent}
+.add-btn:active{background:var(--color-background-secondary,#f5f5f5)}
+
+/* ── responsive breakpoints ── */
+@media(min-width:680px){
+  .cards-wrap{display:none}
+  .table-wrap{display:block}
+  .topbar-title{font-size:16px}
+  .toolbar{flex-wrap:nowrap}
+  .add-btn{width:auto;display:inline-block}
+}
+@media(min-width:680px) and (max-width:900px){
+  .selectors{flex-wrap:nowrap}
+}
+
 @media(prefers-color-scheme:dark){
   .beat{background:#173404;color:#C0DD97}
-  .inline{background:#412402;color:#FAC775}
+  .inline-b{background:#412402;color:#FAC775}
   .miss{background:#501313;color:#F7C1C1}
-  .actual-input.ai-filled{background:#26215C44}
+  .actual-input.ai-filled,.tbl-input.ai-filled{background:#26215C44}
 }
 </style>
 </head>
 <body>
 
-<div class="hdr">
-  <div style="display:flex;align-items:center;gap:10px">
-    <span class="title">Q4FY26 Earnings Scorecard</span>
+<script>
+(function(){
+  const correct='earnings2026';
+  let attempts=0;
+  while(attempts<3){
+    const pwd=prompt(attempts===0?'Enter access password:':'Incorrect. Try again:');
+    if(pwd===correct) break;
+    attempts++;
+    if(attempts===3){
+      document.open();
+      document.write('<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:system-ui;color:#666">Access denied. Refresh to try again.</div>');
+      document.close();
+      throw new Error('Access denied');
+    }
+  }
+})();
+</script>
+
+<div class="topbar">
+  <div style="display:flex;align-items:center;gap:8px">
+    <span class="topbar-title">Q4FY26 Scorecard</span>
     <span class="qtr-badge">Jan–Mar 2026</span>
   </div>
-  <div class="controls">
-    <select id="sectorSel" onchange="loadSector()"></select>
-    <select id="companySel" onchange="loadCompany()"></select>
-    <div class="unit-btns">
-      <button class="unit-btn active" onclick="setUnit('Mn',this)">₹ Mn</button>
-      <button class="unit-btn" onclick="setUnit('Bn',this)">₹ Bn</button>
-      <button class="unit-btn" onclick="setUnit('Cr',this)">₹ Cr</button>
-    </div>
+  <div class="unit-btns">
+    <button class="unit-btn active" onclick="setUnit('Mn',this)">₹ Mn</button>
+    <button class="unit-btn" onclick="setUnit('Bn',this)">₹ Bn</button>
+    <button class="unit-btn" onclick="setUnit('Cr',this)">₹ Cr</button>
   </div>
 </div>
 
-<div class="threshold-row">
-  Beat &gt; <input type="number" id="beatThr" value="2" min="0" max="20" step="0.5" oninput="recalcAll()">%
-  &nbsp;|&nbsp; Miss &lt; −<input type="number" id="missThr" value="2" min="0" max="20" step="0.5" oninput="recalcAll()">%
-  <span style="margin-left:auto;font-size:11px;color:var(--color-text-tertiary,#aaa)">Upload results PDF to auto-fill actuals</span>
+<div class="selectors">
+  <select id="sectorSel" onchange="loadSector()"></select>
+  <select id="companySel" onchange="loadCompany()"></select>
+</div>
+
+<div class="toolbar">
+  <div class="thr-row">
+    <span>Beat &gt;</span>
+    <input type="number" id="beatThr" value="2" min="0" max="20" step="0.5" oninput="recalcAll()">
+    <span>% &nbsp;|&nbsp; Miss &lt; −</span>
+    <input type="number" id="missThr" value="2" min="0" max="20" step="0.5" oninput="recalcAll()">
+    <span>%</span>
+  </div>
 </div>
 
 <div class="upload-bar">
@@ -97,22 +165,23 @@ td:first-child{text-align:left}
   </label>
   <input type="file" id="pdfFileInput" accept=".pdf" onchange="handlePDF(this)">
   <div id="statusPill" class="status-pill status-idle">No file uploaded</div>
-  <span style="font-size:11px;color:var(--color-text-tertiary,#aaa);margin-left:auto">
-    <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#534AB7;margin-right:4px"></span>Purple border = AI-filled
-  </span>
 </div>
 
-<div class="extracted-preview" id="extractedPreview">
+<div class="ext-preview" id="extPreview">
   <h4>Extracted from PDF — review before applying</h4>
   <div id="previewRows"></div>
-  <div style="display:flex;gap:8px;margin-top:8px">
-    <button class="apply-btn" onclick="applyExtracted()">Apply to scorecard</button>
-    <button style="padding:5px 14px;font-size:12px;border:0.5px solid var(--color-border-secondary,#bbb);border-radius:6px;background:transparent;color:var(--color-text-secondary,#666);cursor:pointer" onclick="dismissPreview()">Dismiss</button>
+  <div style="display:flex;gap:8px;margin-top:10px">
+    <button class="btn-apply" onclick="applyExtracted()">Apply to scorecard</button>
+    <button class="btn-dismiss" onclick="dismissPreview()">Dismiss</button>
   </div>
 </div>
 
+<!-- Mobile: cards -->
+<div class="cards-wrap" id="cardsWrap"></div>
+
+<!-- Tablet+: table -->
 <div class="table-wrap">
-  <table id="mainTable">
+  <table>
     <thead>
       <tr>
         <th style="text-align:left;min-width:150px">Metric</th>
@@ -125,14 +194,17 @@ td:first-child{text-align:left}
     <tbody id="tableBody"></tbody>
   </table>
 </div>
+
 <button class="add-btn" onclick="addRow()">+ Add metric</button>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>
-pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-const RAW = {
-  "Banks": {
+const ANTHROPIC_API_KEY='your-anthropic-api-key-here';
+
+const RAW={
+  "Banks":{
     "HDFC Bank":    [{m:"NII",e:344021,u:"Mn"},{m:"PPOP",e:295131,u:"Mn"},{m:"PAT",e:201921,u:"Mn"},{m:"Loans (₹ Bn)",e:29360,u:"spec",spec:"₹ Bn"},{m:"NIM (%)",e:3.54,u:"%"},{m:"GNPA (%)",e:1.20,u:"%"},{m:"Credit Cost (%)",e:0.40,u:"%"}],
     "ICICI Bank":   [{m:"NII",e:227818,u:"Mn"},{m:"PPOP",e:179843,u:"Mn"},{m:"PAT",e:122908,u:"Mn"},{m:"Loans (₹ Bn)",e:15321,u:"spec",spec:"₹ Bn"},{m:"NIM (%)",e:4.29,u:"%"},{m:"GNPA (%)",e:1.44,u:"%"},{m:"Credit Cost (%)",e:0.42,u:"%"}],
     "Axis Bank":    [{m:"NII",e:148459,u:"Mn"},{m:"PPOP",e:113272,u:"Mn"},{m:"PAT",e:68506,u:"Mn"},{m:"Loans (₹ Bn)",e:12320,u:"spec",spec:"₹ Bn"},{m:"NIM (%)",e:3.59,u:"%"},{m:"GNPA (%)",e:1.36,u:"%"}],
@@ -146,14 +218,14 @@ const RAW = {
     "City Union Bank":[{m:"NII",e:7800,u:"Mn"},{m:"PPOP",e:5263,u:"Mn"},{m:"PAT",e:3585,u:"Mn"},{m:"NIM (%)",e:3.80,u:"%"}],
     "DCB Bank":     [{m:"NII",e:6498,u:"Mn"},{m:"PPOP",e:3237,u:"Mn"},{m:"PAT",e:1850,u:"Mn"},{m:"NIM (%)",e:3.31,u:"%"},{m:"GNPA (%)",e:2.76,u:"%"}]
   },
-  "Asset Management": {
+  "Asset Management":{
     "ICICI Pru AMC":[{m:"Revenue",e:14252,u:"Mn"},{m:"Opex",e:3062,u:"Mn"},{m:"Core PAT",e:8449,u:"Mn"},{m:"QAAuM (₹ Bn)",e:11038,u:"spec",spec:"₹ Bn"},{m:"Core RoAAuM (bps)",e:28.6,u:"%"}],
     "HDFC AMC":     [{m:"Revenue",e:10666,u:"Mn"},{m:"Opex",e:2250,u:"Mn"},{m:"Core PAT",e:6396,u:"Mn"},{m:"QAAuM (₹ Bn)",e:9275,u:"spec",spec:"₹ Bn"}],
     "Nippon Life AMC":[{m:"Revenue",e:7159,u:"Mn"},{m:"Opex",e:2487,u:"Mn"},{m:"Core PAT",e:3551,u:"Mn"},{m:"QAAuM (₹ Bn)",e:7250,u:"spec",spec:"₹ Bn"}],
     "UTI AMC":      [{m:"Revenue",e:3837,u:"Mn"},{m:"Core PAT",e:1152,u:"Mn"},{m:"QAAuM (₹ Bn)",e:3885,u:"spec",spec:"₹ Bn"}],
     "Prudent Corp": [{m:"Revenue",e:3528,u:"Mn"},{m:"Core PAT",e:587,u:"Mn"},{m:"QAAuM (₹ Bn)",e:1276,u:"spec",spec:"₹ Bn"}]
   },
-  "Automobiles": {
+  "Automobiles":{
     "Bajaj Auto":   [{m:"Sales",e:160197,u:"Mn"},{m:"EBITDA",e:33197,u:"Mn"},{m:"EBITDA Margin (%)",e:20.7,u:"%"},{m:"Adj. PAT",e:26967,u:"Mn"}],
     "Eicher Motors":[{m:"Sales",e:59507,u:"Mn"},{m:"EBITDA",e:14802,u:"Mn"},{m:"EBITDA Margin (%)",e:24.9,u:"%"},{m:"Adj. PAT",e:15428,u:"Mn"}],
     "Hero MotoCorp":[{m:"Sales",e:126750,u:"Mn"},{m:"EBITDA",e:18510,u:"Mn"},{m:"EBITDA Margin (%)",e:14.6,u:"%"},{m:"Adj. PAT",e:14320,u:"Mn"}],
@@ -161,26 +233,26 @@ const RAW = {
     "Maruti Suzuki":[{m:"Sales",e:511993,u:"Mn"},{m:"EBITDA",e:51684,u:"Mn"},{m:"EBITDA Margin (%)",e:10.1,u:"%"},{m:"Adj. PAT",e:37056,u:"Mn"}],
     "TVS Motor":    [{m:"Sales",e:129552,u:"Mn"},{m:"EBITDA",e:16638,u:"Mn"},{m:"EBITDA Margin (%)",e:12.8,u:"%"},{m:"Adj. PAT",e:10425,u:"Mn"}]
   },
-  "Cement": {
+  "Cement":{
     "UltraTech Cement":[{m:"Sales",e:252194,u:"Mn"},{m:"EBITDA",e:49327,u:"Mn"},{m:"EBITDA Margin (%)",e:19.6,u:"%"},{m:"Adj. PAT",e:27255,u:"Mn"},{m:"Volume (mt)",e:45.3,u:"%"},{m:"EBITDA/t (₹)",e:1088,u:"%"}],
     "Ambuja Cement":[{m:"Sales",e:106752,u:"Mn"},{m:"EBITDA",e:15708,u:"Mn"},{m:"EBITDA Margin (%)",e:14.7,u:"%"},{m:"Adj. PAT",e:2858,u:"Mn"},{m:"Volume (mt)",e:20.4,u:"%"},{m:"EBITDA/t (₹)",e:771,u:"%"}],
-    "Shree Cement":[{m:"Sales",e:54774,u:"Mn"},{m:"EBITDA",e:12287,u:"Mn"},{m:"EBITDA Margin (%)",e:22.4,u:"%"},{m:"Adj. PAT",e:5928,u:"Mn"},{m:"Volume (mt)",e:10.6,u:"%"},{m:"EBITDA/t (₹)",e:1156,u:"%"}],
+    "Shree Cement": [{m:"Sales",e:54774,u:"Mn"},{m:"EBITDA",e:12287,u:"Mn"},{m:"EBITDA Margin (%)",e:22.4,u:"%"},{m:"Adj. PAT",e:5928,u:"Mn"},{m:"Volume (mt)",e:10.6,u:"%"},{m:"EBITDA/t (₹)",e:1156,u:"%"}],
     "Dalmia Bharat":[{m:"Sales",e:43981,u:"Mn"},{m:"EBITDA",e:8514,u:"Mn"},{m:"EBITDA Margin (%)",e:19.4,u:"%"},{m:"Adj. PAT",e:3391,u:"Mn"},{m:"Volume (mt)",e:9.1,u:"%"}],
-    "JK Cement":   [{m:"Sales",e:40494,u:"Mn"},{m:"EBITDA",e:6936,u:"Mn"},{m:"EBITDA Margin (%)",e:17.1,u:"%"},{m:"Adj. PAT",e:3060,u:"Mn"},{m:"EBITDA/t (₹)",e:1026,u:"%"}],
-    "ACC":         [{m:"Sales",e:66797,u:"Mn"},{m:"EBITDA",e:7488,u:"Mn"},{m:"EBITDA Margin (%)",e:11.2,u:"%"},{m:"Adj. PAT",e:3519,u:"Mn"}]
+    "JK Cement":    [{m:"Sales",e:40494,u:"Mn"},{m:"EBITDA",e:6936,u:"Mn"},{m:"EBITDA Margin (%)",e:17.1,u:"%"},{m:"Adj. PAT",e:3060,u:"Mn"},{m:"EBITDA/t (₹)",e:1026,u:"%"}],
+    "ACC":          [{m:"Sales",e:66797,u:"Mn"},{m:"EBITDA",e:7488,u:"Mn"},{m:"EBITDA Margin (%)",e:11.2,u:"%"},{m:"Adj. PAT",e:3519,u:"Mn"}]
   },
-  "IT": {
-    "TCS":         [{m:"Revenue (US$ Mn)",e:7618,u:"spec",spec:"US$ Mn"},{m:"Revenue (₹ Bn)",e:695,u:"spec",spec:"₹ Bn"},{m:"EBIT Margin (%)",e:25.3,u:"%"},{m:"Adj. PAT (₹ Bn)",e:140,u:"spec",spec:"₹ Bn"}],
-    "Infosys":     [{m:"Revenue (US$ Mn)",e:5086,u:"spec",spec:"US$ Mn"},{m:"Revenue (₹ Bn)",e:464,u:"spec",spec:"₹ Bn"},{m:"EBIT Margin (%)",e:21.0,u:"%"},{m:"Adj. PAT (₹ Bn)",e:75.7,u:"spec",spec:"₹ Bn"}],
+  "IT":{
+    "TCS":          [{m:"Revenue (US$ Mn)",e:7618,u:"spec",spec:"US$ Mn"},{m:"Revenue (₹ Bn)",e:695,u:"spec",spec:"₹ Bn"},{m:"EBIT Margin (%)",e:25.3,u:"%"},{m:"Adj. PAT (₹ Bn)",e:140,u:"spec",spec:"₹ Bn"}],
+    "Infosys":      [{m:"Revenue (US$ Mn)",e:5086,u:"spec",spec:"US$ Mn"},{m:"Revenue (₹ Bn)",e:464,u:"spec",spec:"₹ Bn"},{m:"EBIT Margin (%)",e:21.0,u:"%"},{m:"Adj. PAT (₹ Bn)",e:75.7,u:"spec",spec:"₹ Bn"}],
     "HCL Technologies":[{m:"Revenue (US$ Mn)",e:3730,u:"spec",spec:"US$ Mn"},{m:"Revenue (₹ Bn)",e:340,u:"spec",spec:"₹ Bn"},{m:"EBIT Margin (%)",e:17.8,u:"%"},{m:"Adj. PAT (₹ Bn)",e:48.3,u:"spec",spec:"₹ Bn"}],
-    "Wipro":       [{m:"Revenue (US$ Mn)",e:2668,u:"spec",spec:"US$ Mn"},{m:"Revenue (₹ Bn)",e:246,u:"spec",spec:"₹ Bn"},{m:"EBIT Margin (%)",e:17.3,u:"%"},{m:"Adj. PAT (₹ Bn)",e:36.8,u:"spec",spec:"₹ Bn"}],
+    "Wipro":        [{m:"Revenue (US$ Mn)",e:2668,u:"spec",spec:"US$ Mn"},{m:"Revenue (₹ Bn)",e:246,u:"spec",spec:"₹ Bn"},{m:"EBIT Margin (%)",e:17.3,u:"%"},{m:"Adj. PAT (₹ Bn)",e:36.8,u:"spec",spec:"₹ Bn"}],
     "Tech Mahindra":[{m:"Revenue (US$ Mn)",e:1620,u:"spec",spec:"US$ Mn"},{m:"EBIT Margin (%)",e:13.5,u:"%"},{m:"Adj. PAT (₹ Bn)",e:15.8,u:"spec",spec:"₹ Bn"}],
-    "LTIMindtree":[{m:"Revenue (US$ Mn)",e:1224,u:"spec",spec:"US$ Mn"},{m:"EBIT Margin (%)",e:14.9,u:"%"},{m:"Adj. PAT (₹ Bn)",e:14.2,u:"spec",spec:"₹ Bn"}],
+    "LTIMindtree":  [{m:"Revenue (US$ Mn)",e:1224,u:"spec",spec:"US$ Mn"},{m:"EBIT Margin (%)",e:14.9,u:"%"},{m:"Adj. PAT (₹ Bn)",e:14.2,u:"spec",spec:"₹ Bn"}],
     "Persistent Systems":[{m:"Revenue (US$ Mn)",e:441,u:"spec",spec:"US$ Mn"},{m:"EBIT Margin (%)",e:16.5,u:"%"},{m:"Adj. PAT (₹ Bn)",e:5.3,u:"spec",spec:"₹ Bn"}],
-    "Coforge":     [{m:"Revenue (US$ Mn)",e:487,u:"spec",spec:"US$ Mn"},{m:"EBIT Margin (%)",e:14.6,u:"%"},{m:"Adj. PAT (₹ Bn)",e:4.5,u:"spec",spec:"₹ Bn"}],
-    "Mphasis":     [{m:"Revenue (US$ Mn)",e:463,u:"spec",spec:"US$ Mn"},{m:"EBIT Margin (%)",e:15.0,u:"%"},{m:"Adj. PAT (₹ Bn)",e:5.0,u:"spec",spec:"₹ Bn"}]
+    "Coforge":      [{m:"Revenue (US$ Mn)",e:487,u:"spec",spec:"US$ Mn"},{m:"EBIT Margin (%)",e:14.6,u:"%"},{m:"Adj. PAT (₹ Bn)",e:4.5,u:"spec",spec:"₹ Bn"}],
+    "Mphasis":      [{m:"Revenue (US$ Mn)",e:463,u:"spec",spec:"US$ Mn"},{m:"EBIT Margin (%)",e:15.0,u:"%"},{m:"Adj. PAT (₹ Bn)",e:5.0,u:"spec",spec:"₹ Bn"}]
   },
-  "Consumer / FMCG": {
+  "Consumer / FMCG":{
     "Hindustan Unilever":[{m:"Sales",e:159233,u:"Mn"},{m:"EBITDA",e:36784,u:"Mn"},{m:"EBITDA Margin (%)",e:23.1,u:"%"},{m:"Adj. PAT",e:25996,u:"Mn"},{m:"Volume Growth (%)",e:4.0,u:"%"}],
     "ITC":          [{m:"Sales",e:186115,u:"Mn"},{m:"EBITDA",e:62120,u:"Mn"},{m:"EBITDA Margin (%)",e:33.4,u:"%"},{m:"Adj. PAT",e:49355,u:"Mn"}],
     "Britannia":    [{m:"Sales",e:49382,u:"Mn"},{m:"EBITDA",e:9156,u:"Mn"},{m:"EBITDA Margin (%)",e:18.5,u:"%"},{m:"Adj. PAT",e:6527,u:"Mn"},{m:"Volume Growth (%)",e:7.0,u:"%"}],
@@ -192,7 +264,7 @@ const RAW = {
     "Pidilite":     [{m:"Sales",e:35594,u:"Mn"},{m:"EBITDA",e:7342,u:"Mn"},{m:"EBITDA Margin (%)",e:20.6,u:"%"},{m:"Adj. PAT",e:5406,u:"Mn"}],
     "D'Mart":       [{m:"Sales",e:176145,u:"Mn"},{m:"EBITDA",e:11685,u:"Mn"},{m:"EBITDA Margin (%)",e:6.6,u:"%"},{m:"Adj. PAT",e:6227,u:"Mn"}]
   },
-  "Pharma": {
+  "Pharma":{
     "Sun Pharma":   [{m:"Sales",e:144491,u:"Mn"},{m:"EBITDA",e:37609,u:"Mn"},{m:"EBITDA Margin (%)",e:26.0,u:"%"},{m:"Adj. PAT",e:25520,u:"Mn"}],
     "Lupin":        [{m:"Sales",e:70038,u:"Mn"},{m:"EBITDA",e:19248,u:"Mn"},{m:"EBITDA Margin (%)",e:27.5,u:"%"},{m:"Adj. PAT",e:12645,u:"Mn"}],
     "Dr. Reddy's":  [{m:"Sales",e:83966,u:"Mn"},{m:"EBITDA",e:17636,u:"Mn"},{m:"EBITDA Margin (%)",e:21.0,u:"%"},{m:"Adj. PAT",e:11297,u:"Mn"}],
@@ -203,7 +275,7 @@ const RAW = {
     "Zydus Lifesciences":[{m:"Sales",e:68880,u:"Mn"},{m:"EBITDA",e:16674,u:"Mn"},{m:"EBITDA Margin (%)",e:24.2,u:"%"},{m:"Adj. PAT",e:8733,u:"Mn"}],
     "Ajanta Pharma":[{m:"Sales",e:13075,u:"Mn"},{m:"EBITDA",e:3232,u:"Mn"},{m:"EBITDA Margin (%)",e:24.7,u:"%"},{m:"Adj. PAT",e:2160,u:"Mn"}]
   },
-  "Capital Goods": {
+  "Capital Goods":{
     "L&T":          [{m:"Sales",e:808694,u:"Mn"},{m:"EBITDA",e:88180,u:"Mn"},{m:"EBITDA Margin (%)",e:10.9,u:"%"},{m:"Adj. PAT",e:54352,u:"Mn"}],
     "Bharat Electronics":[{m:"Sales",e:100191,u:"Mn"},{m:"EBITDA",e:27993,u:"Mn"},{m:"EBITDA Margin (%)",e:27.9,u:"%"},{m:"Adj. PAT",e:22146,u:"Mn"}],
     "GE Vernova T&D":[{m:"Sales",e:17592,u:"Mn"},{m:"EBITDA",e:4605,u:"Mn"},{m:"EBITDA Margin (%)",e:26.2,u:"%"},{m:"Adj. PAT",e:3436,u:"Mn"}],
@@ -213,7 +285,7 @@ const RAW = {
     "BHEL":         [{m:"Sales",e:113585,u:"Mn"},{m:"EBITDA",e:11852,u:"Mn"},{m:"EBITDA Margin (%)",e:10.4,u:"%"},{m:"Adj. PAT",e:7972,u:"Mn"}],
     "KEC International":[{m:"Sales",e:70102,u:"Mn"},{m:"EBITDA",e:4783,u:"Mn"},{m:"EBITDA Margin (%)",e:6.8,u:"%"},{m:"Adj. PAT",e:2147,u:"Mn"}]
   },
-  "Oil & Gas": {
+  "Oil & Gas":{
     "Reliance Industries":[{m:"Sales",e:2742700,u:"Mn"},{m:"EBITDA",e:443600,u:"Mn"},{m:"EBITDA Margin (%)",e:16.2,u:"%"},{m:"Adj. PAT",e:169800,u:"Mn"}],
     "ONGC":         [{m:"Sales",e:345200,u:"Mn"},{m:"EBITDA",e:201500,u:"Mn"},{m:"EBITDA Margin (%)",e:58.4,u:"%"},{m:"Adj. PAT",e:102600,u:"Mn"}],
     "IOC":          [{m:"Sales",e:2198400,u:"Mn"},{m:"EBITDA",e:161400,u:"Mn"},{m:"EBITDA Margin (%)",e:7.3,u:"%"},{m:"Adj. PAT",e:86400,u:"Mn"},{m:"Reported GRM ($/bbl)",e:22.0,u:"%"}],
@@ -223,7 +295,7 @@ const RAW = {
     "Gujarat Gas":  [{m:"Sales",e:31500,u:"Mn"},{m:"EBITDA",e:3600,u:"Mn"},{m:"EBITDA Margin (%)",e:11.4,u:"%"},{m:"Adj. PAT",e:2000,u:"Mn"},{m:"Volume (mmscmd)",e:8.0,u:"%"}],
     "IGL":          [{m:"Sales",e:38700,u:"Mn"},{m:"EBITDA",e:4400,u:"Mn"},{m:"EBITDA Margin (%)",e:11.2,u:"%"},{m:"Adj. PAT",e:3200,u:"Mn"},{m:"Volume (mmscmd)",e:9.2,u:"%"}]
   },
-  "Metals & Mining": {
+  "Metals & Mining":{
     "Tata Steel":   [{m:"Sales",e:645700,u:"Mn"},{m:"EBITDA",e:94800,u:"Mn"},{m:"EBITDA Margin (%)",e:14.7,u:"%"},{m:"Adj. PAT",e:26000,u:"Mn"},{m:"TSI EBITDA/t (₹)",e:14610,u:"%"}],
     "JSW Steel":    [{m:"Sales",e:516800,u:"Mn"},{m:"EBITDA",e:85500,u:"Mn"},{m:"EBITDA Margin (%)",e:16.6,u:"%"},{m:"Adj. PAT",e:32700,u:"Mn"},{m:"EBITDA/t (₹)",e:10847,u:"%"}],
     "Jindal Steel": [{m:"Sales",e:148200,u:"Mn"},{m:"EBITDA",e:22800,u:"Mn"},{m:"EBITDA Margin (%)",e:15.4,u:"%"},{m:"Adj. PAT",e:9000,u:"Mn"},{m:"EBITDA/t (₹)",e:9244,u:"%"}],
@@ -231,20 +303,20 @@ const RAW = {
     "SAIL":         [{m:"Sales",e:318200,u:"Mn"},{m:"EBITDA",e:40300,u:"Mn"},{m:"EBITDA Margin (%)",e:12.7,u:"%"},{m:"Adj. PAT",e:17200,u:"Mn"},{m:"EBITDA/t (₹)",e:7243,u:"%"}],
     "NMDC":         [{m:"Sales",e:91700,u:"Mn"},{m:"EBITDA",e:26300,u:"Mn"},{m:"EBITDA Margin (%)",e:28.7,u:"%"},{m:"Adj. PAT",e:20900,u:"Mn"},{m:"EBITDA/t (₹)",e:1723,u:"%"}]
   },
-  "Healthcare / Hospitals": {
+  "Healthcare":{
     "Apollo Hospitals":[{m:"Sales",e:64514,u:"Mn"},{m:"EBITDA",e:9675,u:"Mn"},{m:"EBITDA Margin (%)",e:15.0,u:"%"},{m:"Adj. PAT",e:4909,u:"Mn"}],
     "Max Healthcare":[{m:"Sales",e:25661,u:"Mn"},{m:"EBITDA",e:6915,u:"Mn"},{m:"EBITDA Margin (%)",e:26.9,u:"%"},{m:"Adj. PAT",e:4193,u:"Mn"}],
     "Fortis Healthcare":[{m:"Sales",e:23116,u:"Mn"},{m:"EBITDA",e:5151,u:"Mn"},{m:"EBITDA Margin (%)",e:22.3,u:"%"},{m:"Adj. PAT",e:2306,u:"Mn"}],
     "Narayana Hrudayalaya":[{m:"Sales",e:25328,u:"Mn"},{m:"EBITDA",e:4786,u:"Mn"},{m:"EBITDA Margin (%)",e:18.9,u:"%"},{m:"Adj. PAT",e:2454,u:"Mn"}]
   },
-  "NBFCs / HFCs": {
+  "NBFCs / HFCs":{
     "Bajaj Finance":[{m:"NII",e:120432,u:"Mn"},{m:"PPOP",e:98123,u:"Mn"},{m:"PAT",e:55412,u:"Mn"},{m:"AUM (₹ Bn)",e:5100,u:"spec",spec:"₹ Bn"},{m:"NIM (%)",e:9.7,u:"%"},{m:"Credit Cost (%)",e:2.0,u:"%"}],
     "Cholamandalam":[{m:"NII",e:38303,u:"Mn"},{m:"PPOP",e:28261,u:"Mn"},{m:"PAT",e:14585,u:"Mn"},{m:"NIM (%)",e:7.2,u:"%"},{m:"Credit Cost (%)",e:1.6,u:"%"}],
     "Shriram Finance":[{m:"NII",e:68007,u:"Mn"},{m:"PPOP",e:50627,u:"Mn"},{m:"PAT",e:27820,u:"Mn"},{m:"NIM (%)",e:9.7,u:"%"},{m:"Credit Cost (%)",e:1.9,u:"%"}],
     "LICHF":        [{m:"NII",e:23409,u:"Mn"},{m:"PPOP",e:20979,u:"Mn"},{m:"PAT",e:15226,u:"Mn"},{m:"NIM (%)",e:2.9,u:"%"}],
     "Can Fin Homes":[{m:"NII",e:4133,u:"Mn"},{m:"PPOP",e:3536,u:"Mn"},{m:"PAT",e:2524,u:"Mn"},{m:"NIM (%)",e:3.7,u:"%"}]
   },
-  "Consumer Durables / W&C": {
+  "Consumer Durables":{
     "Polycab India":[{m:"Sales",e:84318,u:"Mn"},{m:"EBITDA",e:11347,u:"Mn"},{m:"EBITDA Margin (%)",e:13.5,u:"%"},{m:"Adj. PAT",e:7870,u:"Mn"}],
     "Havells India":[{m:"Sales",e:73419,u:"Mn"},{m:"EBITDA",e:7368,u:"Mn"},{m:"EBITDA Margin (%)",e:10.0,u:"%"},{m:"Adj. PAT",e:5206,u:"Mn"}],
     "KEI Industries":[{m:"Sales",e:34957,u:"Mn"},{m:"EBITDA",e:3456,u:"Mn"},{m:"EBITDA Margin (%)",e:9.9,u:"%"},{m:"Adj. PAT",e:2554,u:"Mn"}],
@@ -254,14 +326,12 @@ const RAW = {
   }
 };
 
-let unit='Mn', currentMetrics=[], actuals={}, customRows=[], aiFilled={}, pendingExtracted={};
-const ANTHROPIC_API_KEY = '';
+let unit='Mn',currentMetrics=[],actuals={},customRows=[],aiFilled={},pendingExtracted={};
 
-
-function setStatus(msg, type){
-  const p = document.getElementById('statusPill');
-  p.className = 'status-pill status-'+type;
-  p.innerHTML = (type==='loading'?'<div class="spinner"></div>':'')+msg;
+function setStatus(msg,type){
+  const p=document.getElementById('statusPill');
+  p.className='status-pill status-'+type;
+  p.innerHTML=(type==='loading'?'<div class="spinner"></div>':'')+msg;
 }
 
 function populateSectors(){
@@ -275,7 +345,7 @@ function loadSector(){
   const cs=document.getElementById('companySel');
   cs.innerHTML='';
   Object.keys(RAW[sector]).forEach(k=>{const o=document.createElement('option');o.value=k;o.textContent=k;cs.appendChild(o);});
-  actuals={};customRows=[];aiFilled={};
+  actuals={};customRows={};aiFilled={};
   dismissPreview();
   loadCompany();
 }
@@ -286,22 +356,31 @@ function loadCompany(){
   currentMetrics=JSON.parse(JSON.stringify(RAW[sector][company]));
   actuals={};customRows=[];aiFilled={};
   dismissPreview();
-  renderTable();
+  render();
 }
 
 function setUnit(u,btn){
   unit=u;
   document.querySelectorAll('.unit-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  renderTable();
+  render();
 }
 
-function getConvFactor(mu){
-  if(mu==='%'||mu==='spec') return 1;
-  if(unit==='Mn') return 1;
-  if(unit==='Bn') return 0.001;
-  if(unit==='Cr') return 0.1;
-  return 1;
+function toBaseMn(v,mu){
+  if(mu==='%'||mu==='spec') return parseFloat(v);
+  const n=parseFloat(v);
+  if(unit==='Mn') return n;
+  if(unit==='Bn') return n*1000;
+  if(unit==='Cr') return n*10;
+  return n;
+}
+
+function getDisplayVal(estMn,mu){
+  if(mu==='%'||mu==='spec') return estMn;
+  if(unit==='Mn') return estMn;
+  if(unit==='Bn') return estMn/1000;
+  if(unit==='Cr') return estMn/10;
+  return estMn;
 }
 
 function getUnitLabel(mu){
@@ -312,7 +391,7 @@ function getUnitLabel(mu){
 
 function fmtVal(v,mu){
   if(v===null||v===undefined||v==='') return '—';
-  const f=getConvFactor(mu), n=parseFloat(v)*f;
+  const n=getDisplayVal(parseFloat(v),mu);
   if(mu==='%') return parseFloat(v).toFixed(2)+'%';
   if(mu==='spec') return parseFloat(v).toLocaleString('en-IN',{maximumFractionDigits:2});
   if(Math.abs(n)>=10000) return n.toLocaleString('en-IN',{maximumFractionDigits:0});
@@ -323,93 +402,111 @@ function fmtVal(v,mu){
 function getBeat(){return parseFloat(document.getElementById('beatThr').value)||2;}
 function getMiss(){return parseFloat(document.getElementById('missThr').value)||2;}
 
-function toBaseMn(v, mu){
-  if(mu==='%'||mu==='spec') return parseFloat(v);
-  const n = parseFloat(v);
-  if(unit==='Mn') return n;
-  if(unit==='Bn') return n*1000;
-  if(unit==='Cr') return n*10;
-  return n;
-}
-
-function calcDev(est,actual,mu){
-  if(mu==='%'){
-    const a=parseFloat(actual), e=parseFloat(est);
-    if(isNaN(a)||isNaN(e)) return null;
-    return a-e;
-  }
-  const aBase=toBaseMn(actual,mu);
-  const eBase=parseFloat(est);
-  if(isNaN(aBase)||isNaN(eBase)||eBase===0) return null;
-  return ((aBase-eBase)/Math.abs(eBase))*100;
+function calcDev(estBase,actual,mu){
+  if(mu==='%'){const a=parseFloat(actual),e=parseFloat(estBase);if(isNaN(a)||isNaN(e))return null;return a-e;}
+  const aBase=toBaseMn(actual,mu),eBase=parseFloat(estBase);
+  if(isNaN(aBase)||isNaN(eBase)||eBase===0)return null;
+  return((aBase-eBase)/Math.abs(eBase))*100;
 }
 
 function getBadge(dev,mu){
-  if(dev===null) return '<span class="na">—</span>';
+  if(dev===null)return '<span class="na">—</span>';
   const beat=getBeat(),miss=getMiss();
-  const thr = mu==='%' ? beat/10 : beat;
-  const mth = mu==='%' ? miss/10 : miss;
-  if(dev>thr) return '<span class="badge beat">Beat</span>';
-  if(dev<-mth) return '<span class="badge miss">Miss</span>';
-  return '<span class="badge inline">In-line</span>';
+  const thr=mu==='%'?beat/10:beat,mth=mu==='%'?miss/10:miss;
+  if(dev>thr)return '<span class="badge beat">Beat</span>';
+  if(dev<-mth)return '<span class="badge miss">Miss</span>';
+  return '<span class="badge inline-b">In-line</span>';
 }
 
-function renderTable(){
-  const tbody=document.getElementById('tableBody');
+function getDevColor(dev,mu){
+  if(dev===null)return 'inherit';
+  const beat=getBeat(),miss=getMiss();
+  const thr=mu==='%'?beat/10:beat,mth=mu==='%'?miss/10:miss;
+  if(dev>thr)return '#1D9E75';
+  if(dev<-mth)return '#D85A30';
+  return '#BA7517';
+}
+
+function render(){
   const allRows=[...currentMetrics,...customRows];
-  if(!allRows.length){tbody.innerHTML='<tr><td colspan="5" style="padding:40px;text-align:center;color:var(--color-text-secondary,#888)">No metrics loaded</td></tr>';return;}
-  let html='';
-  allRows.forEach((row,i)=>{
+  renderCards(allRows);
+  renderTable(allRows);
+}
+
+function renderCards(allRows){
+  const wrap=document.getElementById('cardsWrap');
+  if(!allRows.length){wrap.innerHTML='<div style="padding:40px;text-align:center;color:var(--color-text-secondary,#888);font-size:13px">No metrics loaded</div>';return;}
+  wrap.innerHTML=allRows.map((row,i)=>{
     const actual=actuals[i]||'';
     const dev=actual!==''?calcDev(row.e,actual,row.u):null;
     const devStr=dev!==null?(dev>=0?'+':'')+dev.toFixed(2)+(row.u==='%'?' pp':'%'):'—';
-    const devColor=dev!==null?(dev>getBeat()?'#1D9E75':dev<-getMiss()?'#D85A30':'#BA7517'):'inherit';
+    const devColor=getDevColor(dev,row.u);
     const badge=actual!==''?getBadge(dev,row.u):'<span class="na">—</span>';
     const ulbl=row.u==='spec'?(row.spec||''):getUnitLabel(row.u);
     const aiClass=aiFilled[i]?' ai-filled':'';
-    html+=`<tr>
-      <td><span class="metric">${row.m}</span>${ulbl?`<span style="font-size:11px;color:var(--color-text-secondary,#888);margin-left:4px">(${ulbl})</span>`:''}
-      ${aiFilled[i]?'<span style="font-size:10px;color:#534AB7;margin-left:4px">AI</span>':''}</td>
-      <td><input class="actual-input${actual?' has-val':''}${aiClass}" id="inp_${i}" type="number" value="${actual}" placeholder="Enter" step="any" onchange="setActual(${i},this.value)" oninput="setActual(${i},this.value)" style="width:90px"></td>
-      <td class="est">${fmtVal(row.e,row.u)}</td>
+    return `<div class="metric-card">
+      <div class="card-header">
+        <span class="card-metric">${row.m}${ulbl?`<span class="card-unit">(${ulbl})</span>`:''}${aiFilled[i]?'<span class="card-ai">AI</span>':''}</span>
+        ${badge}
+      </div>
+      <div class="card-body">
+        <div class="card-field">
+          <span class="card-label">Actual</span>
+          <input class="actual-input${actual?' has-val':''}${aiClass}" id="cinp_${i}" type="number" inputmode="decimal" value="${actual}" placeholder="Enter" step="any"
+            onchange="setActual(${i},this.value)" oninput="setActual(${i},this.value)">
+        </div>
+        <div class="card-field">
+          <span class="card-label">Estimate (PL)</span>
+          <span class="card-est">${fmtVal(row.e,row.u)}</span>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span style="font-size:12px;color:var(--color-text-secondary,#666)">vs estimate</span>
+        <span class="devpct" style="color:${devColor}">${devStr}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderTable(allRows){
+  const tbody=document.getElementById('tableBody');
+  if(!allRows.length){tbody.innerHTML='<tr><td colspan="5" style="padding:40px;text-align:center;color:var(--color-text-secondary,#888)">No metrics loaded</td></tr>';return;}
+  tbody.innerHTML=allRows.map((row,i)=>{
+    const actual=actuals[i]||'';
+    const dev=actual!==''?calcDev(row.e,actual,row.u):null;
+    const devStr=dev!==null?(dev>=0?'+':'')+dev.toFixed(2)+(row.u==='%'?' pp':'%'):'—';
+    const devColor=getDevColor(dev,row.u);
+    const badge=actual!==''?getBadge(dev,row.u):'<span class="na">—</span>';
+    const ulbl=row.u==='spec'?(row.spec||''):getUnitLabel(row.u);
+    const aiClass=aiFilled[i]?' ai-filled':'';
+    return `<tr>
+      <td><span class="tbl-metric">${row.m}</span>${ulbl?`<span style="font-size:11px;color:var(--color-text-secondary,#888);margin-left:4px">(${ulbl})</span>`:''}${aiFilled[i]?'<span style="font-size:10px;color:#534AB7;margin-left:4px">AI</span>':''}</td>
+      <td><input class="tbl-input${actual?' has-val':''}${aiClass}" id="tinp_${i}" type="number" value="${actual}" placeholder="Enter" step="any"
+        onchange="setActual(${i},this.value)" oninput="setActual(${i},this.value)"></td>
+      <td class="tbl-est">${fmtVal(row.e,row.u)}</td>
       <td class="devpct" style="color:${devColor}">${devStr}</td>
       <td>${badge}</td>
     </tr>`;
-  });
-  tbody.innerHTML=html;
+  }).join('');
 }
 
 function setActual(idx,val){
   actuals[idx]=val;
   aiFilled[idx]=false;
-  const allRows=[...currentMetrics,...customRows];
-  const row=allRows[idx];
-  const inp=document.getElementById('inp_'+idx);
-  if(!inp) return;
-  inp.classList.toggle('has-val',val!=='');
-  inp.classList.remove('ai-filled');
-  const tr=inp.closest('tr');
-  const dev=val!==''?calcDev(row.e,val,row.u):null;
-  const devStr=dev!==null?(dev>=0?'+':'')+dev.toFixed(2)+(row.u==='%'?' pp':'%'):'—';
-  const devColor=dev!==null?(dev>getBeat()?'#1D9E75':dev<-getMiss()?'#D85A30':'#BA7517'):'inherit';
-  tr.children[3].textContent=devStr;
-  tr.children[3].style.color=devColor;
-  tr.children[4].innerHTML=val!==''?getBadge(dev,row.u):'<span class="na">—</span>';
+  render();
 }
 
-function recalcAll(){renderTable();}
+function recalcAll(){render();}
 
 function addRow(){
-  const name=prompt('Metric name (e.g. EBITDA/ton, NIM, Revenue):');
-  if(!name) return;
-  const uc=prompt('Unit:\n1 = ₹ Amount (follows Mn/Bn/Cr toggle)\n2 = % or ratio\n3 = Custom label\nEnter 1, 2, or 3:');
+  const name=prompt('Metric name:');if(!name)return;
+  const uc=prompt('Unit:\n1 = ₹ Amount (follows Mn/Bn/Cr)\n2 = % or ratio\n3 = Custom label\nEnter 1,2 or 3:');
   let u='Mn',spec='';
-  if(uc==='2') u='%';
-  else if(uc==='3'){spec=prompt('Enter unit label:')||'';u='spec';}
-  const ev=prompt('Enter estimate value:');
-  if(ev===null) return;
+  if(uc==='2')u='%';
+  else if(uc==='3'){spec=prompt('Unit label:')||'';u='spec';}
+  const ev=prompt('Estimate value:');if(ev===null)return;
   customRows.push({m:name,e:parseFloat(ev)||0,u,spec});
-  renderTable();
+  render();
 }
 
 async function extractTextFromPDF(file){
@@ -424,102 +521,73 @@ async function extractTextFromPDF(file){
   return text;
 }
 
-function buildPrompt(pdfText, company, metrics){
-  const metricList = metrics.map((m,i)=>`${i}: "${m.m}" in ${m.u==='%'?'percentage (e.g. 3.54 for 3.54%)':m.u==='spec'?(m.spec||'original unit'):'₹ Millions (crores × 10 or lakhs ÷ 10)'}`).join('\n');
-  return `Extract Q4FY26 (January-March 2026) actual reported financials for ${company} from the text below.
+function buildPrompt(pdfText,company,metrics){
+  const metricList=metrics.map((m,i)=>`${i}: "${m.m}" in ${m.u==='%'?'percentage (e.g. 3.54 for 3.54%)':m.u==='spec'?(m.spec||'original unit'):'₹ Millions (if doc uses Crores multiply by 10, if Billions multiply by 1000)'}`).join('\n');
+  return `Extract Q4FY26 (January-March 2026) actual reported financials for ${company}.
 
-Metrics needed (index: name, unit):
+Metrics (index: name, unit needed):
 ${metricList}
 
-The document may report numbers in Crores (Cr), Lakhs, Millions or Billions. Convert everything to the unit specified above.
-Conversion: 1 Cr = 10 Mn. 1 Bn = 1000 Mn. 1 Lakh = 0.1 Mn.
+Rules — STRICTLY FOLLOW:
+- Output ONLY raw JSON, zero other text.
+- Keys = metric index as string, values = numbers.
+- Omit any metric not clearly found.
+- Q4FY26 actuals only — ignore FY25, Q3FY26, estimates.
+- % metrics: output number directly (3.54 not 0.0354).
+- Convert to ₹ Mn if doc uses Cr (×10) or Bn (×1000).
 
-Rules:
-- Output ONLY raw JSON, nothing else. No words before or after. No markdown. No explanation.
-- Use metric index as key (string), actual value as number.
-- Skip any metric not clearly found.
-- Use Q4FY26 / Q4 FY2026 / Jan-Mar 2026 figures only, not full year or prior quarters.
-- For % metrics (NIM, GNPA, margins) output the percentage number directly (e.g. 3.54, not 0.0354).
+Example (do NOT use these values): {"0":344500,"1":296000,"4":3.56}
 
-Example output format (do not copy these values):
-{"0":344500,"1":296000,"2":202100,"4":3.56,"5":1.18}
-
-TEXT:
+DOCUMENT TEXT:
 ${pdfText.substring(0,14000)}`;
 }
 
 async function handlePDF(input){
-  const file=input.files[0];
-  if(!file) return;
-  setStatus('Reading PDF...','loading');
+  const file=input.files[0];if(!file)return;
+  setStatus('Reading PDF…','loading');
   dismissPreview();
   try{
     const text=await extractTextFromPDF(file);
-    if(text.trim().length<100){
-      setStatus('PDF appears to be image-based (no text found)','err');
-      return;
-    }
-    setStatus('Extracting numbers with AI...','loading');
+    if(text.trim().length<100){setStatus('PDF appears image-based — no text found','err');return;}
+    setStatus('Extracting with AI…','loading');
     const company=document.getElementById('companySel').value;
     const allRows=[...currentMetrics,...customRows];
     const prompt=buildPrompt(text,company,allRows);
-    const headers = {'Content-Type':'application/json','anthropic-dangerous-direct-browser-access':'true'};
-    if(ANTHROPIC_API_KEY) headers['x-api-key'] = ANTHROPIC_API_KEY;
+    const headers={'Content-Type':'application/json','anthropic-dangerous-direct-browser-access':'true'};
+    if(ANTHROPIC_API_KEY)headers['x-api-key']=ANTHROPIC_API_KEY;
     const resp=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers,
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:1000,
-        messages:[{role:'user',content:prompt}]
-      })
+      method:'POST',headers,
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})
     });
-    if(!resp.ok){
-      const errText=await resp.text();
-      setStatus('API error '+resp.status+': '+errText.slice(0,120),'err');
-      return;
-    }
+    if(!resp.ok){const t=await resp.text();setStatus('API error '+resp.status+': '+t.slice(0,100),'err');return;}
     const data=await resp.json();
     const raw=data.content?.[0]?.text||'{}';
     let extracted={};
-    try{
-      const jsonMatch = raw.match(/\{[\s\S]*\}/);
-      if(!jsonMatch) throw new Error('No JSON found');
-      extracted=JSON.parse(jsonMatch[0]);
-    }catch(e){
-      setStatus('Parse error — raw: '+raw.slice(0,120),'err');
-      return;
-    }
+    try{const m=raw.match(/\{[\s\S]*\}/);if(!m)throw new Error('no json');extracted=JSON.parse(m[0]);}
+    catch(e){setStatus('Parse error: '+raw.slice(0,80),'err');return;}
     const keys=Object.keys(extracted);
-    if(!keys.length){
-      setStatus('No matching metrics found in PDF','err');
-      return;
-    }
+    if(!keys.length){setStatus('No metrics found in PDF','err');return;}
     pendingExtracted=extracted;
     showPreview(extracted,allRows,file.name);
-    setStatus(`Found ${keys.length} metric${keys.length>1?'s':''} — review below`,'done');
-  }catch(e){
-    console.error(e);
-    setStatus('Error: '+e.message,'err');
-  }
+    setStatus(`Found ${keys.length} metric${keys.length>1?'s':''}  — review below`,'done');
+  }catch(e){setStatus('Error: '+e.message,'err');}
   input.value='';
 }
 
 function showPreview(extracted,allRows,fname){
-  const preview=document.getElementById('extractedPreview');
+  const preview=document.getElementById('extPreview');
   const rows=document.getElementById('previewRows');
   preview.style.display='block';
   let html=`<div style="font-size:11px;color:var(--color-text-secondary,#666);margin-bottom:8px">From: <b>${fname}</b></div>`;
   Object.entries(extracted).forEach(([idx,val])=>{
-    const row=allRows[parseInt(idx)];
-    if(!row) return;
+    const row=allRows[parseInt(idx)];if(!row)return;
     const ulbl=row.u==='%'?'%':row.u==='spec'?(row.spec||''):'₹ Mn';
     html+=`<div class="ext-row">
-      <span style="font-weight:500">${row.m}</span>
-      <span>
-        <span style="color:var(--color-text-secondary,#666);font-size:11px;margin-right:8px">Est: ${fmtVal(row.e,row.u)}</span>
-        <span style="font-weight:500">${val} ${ulbl}</span>
-        <span class="ext-match" style="margin-left:6px">✓ matched</span>
+      <span style="font-weight:500;font-size:13px">${row.m}</span>
+      <span style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <span style="color:var(--color-text-secondary,#666);font-size:12px">Est: ${fmtVal(row.e,row.u)}</span>
+        <span style="font-weight:500;font-size:13px">${val} ${ulbl}</span>
+        <span class="ext-match">✓</span>
       </span>
     </div>`;
   });
@@ -530,19 +598,16 @@ function applyExtracted(){
   const allRows=[...currentMetrics,...customRows];
   Object.entries(pendingExtracted).forEach(([idx,val])=>{
     const i=parseInt(idx);
-    if(allRows[i]){
-      actuals[i]=val;
-      aiFilled[i]=true;
-    }
+    if(allRows[i]){actuals[i]=val;aiFilled[i]=true;}
   });
   pendingExtracted={};
   dismissPreview();
-  renderTable();
-  setStatus('Applied — purple borders indicate AI-filled values','done');
+  render();
+  setStatus('Applied — purple border = AI-filled','done');
 }
 
 function dismissPreview(){
-  document.getElementById('extractedPreview').style.display='none';
+  document.getElementById('extPreview').style.display='none';
   document.getElementById('previewRows').innerHTML='';
   pendingExtracted={};
 }
