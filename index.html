@@ -113,24 +113,6 @@ td:first-child{text-align:left}
 </head>
 <body>
 
-<script>
-(function(){
-  const correct='earnings2026';
-  let attempts=0;
-  while(attempts<3){
-    const pwd=prompt(attempts===0?'Enter access password:':'Incorrect. Try again:');
-    if(pwd===correct) break;
-    attempts++;
-    if(attempts===3){
-      document.open();
-      document.write('<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:system-ui;color:#666">Access denied. Refresh to try again.</div>');
-      document.close();
-      throw new Error('Access denied');
-    }
-  }
-})();
-</script>
-
 <div class="topbar">
   <div style="display:flex;align-items:center;gap:8px">
     <span class="topbar-title">Q4FY26 Scorecard</span>
@@ -200,8 +182,6 @@ td:first-child{text-align:left}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>
 pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-
-const ANTHROPIC_API_KEY='your-anthropic-api-key-here';
 
 const RAW={
   "Banks":{
@@ -554,7 +534,6 @@ async function handlePDF(input){
     const allRows=[...currentMetrics,...customRows];
     const prompt=buildPrompt(text,company,allRows);
     const headers={'Content-Type':'application/json','anthropic-dangerous-direct-browser-access':'true'};
-    if(ANTHROPIC_API_KEY)headers['x-api-key']=ANTHROPIC_API_KEY;
     const resp=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',headers,
       body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})
