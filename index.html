@@ -1,20 +1,4 @@
-<script>
-(function(){
-  const correct = '1234';
-  let attempts = 0;
-  while(attempts < 3){
-    const pwd = prompt(attempts === 0 ? 'Enter access password:' : 'Incorrect. Try again:');
-    if(pwd === correct) break;
-    attempts++;
-    if(attempts === 3){
-      document.open();
-      document.write('<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:system-ui;color:#666">Access denied. Refresh to try again.</div>');
-      document.close();
-      throw new Error('Access denied');
-    }
-  }
-})();
-</script><!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
