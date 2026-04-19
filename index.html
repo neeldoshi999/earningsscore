@@ -1,4 +1,20 @@
-<!DOCTYPE html>
+<script>
+(function(){
+  const correct = '1234';
+  let attempts = 0;
+  while(attempts < 3){
+    const pwd = prompt(attempts === 0 ? 'Enter access password:' : 'Incorrect. Try again:');
+    if(pwd === correct) break;
+    attempts++;
+    if(attempts === 3){
+      document.open();
+      document.write('<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:system-ui;color:#666">Access denied. Refresh to try again.</div>');
+      document.close();
+      throw new Error('Access denied');
+    }
+  }
+})();
+</script><!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -255,7 +271,7 @@ const RAW = {
 };
 
 let unit='Mn', currentMetrics=[], actuals={}, customRows=[], aiFilled={}, pendingExtracted={};
-const ANTHROPIC_API_KEY = '';
+const ANTHROPIC_API_KEY = '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';
 
 
 function setStatus(msg, type){
@@ -463,12 +479,11 @@ async function handlePDF(input){
     const company=document.getElementById('companySel').value;
     const allRows=[...currentMetrics,...customRows];
     const prompt=buildPrompt(text,company,allRows);
+    const headers = {'Content-Type':'application/json','anthropic-dangerous-direct-browser-access':'true'};
+    if(ANTHROPIC_API_KEY) headers['x-api-key'] = ANTHROPIC_API_KEY;
     const resp=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'anthropic-dangerous-direct-browser-access':'true'
-      },
+      headers,
       body:JSON.stringify({
         model:'claude-sonnet-4-20250514',
         max_tokens:1000,
