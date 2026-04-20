@@ -435,7 +435,7 @@ function renderCards(allRows){
         <div class="card-field">
           <span class="card-label">Actual</span>
           <input class="actual-input${actual?' has-val':''}${aiClass}" id="cinp_${i}" type="number" inputmode="decimal" value="${actual}" placeholder="Enter" step="any"
-            onchange="setActual(${i},this.value)">
+            oninput="handleInput(${i},this)" onchange="handleInput(${i},this)">
         </div>
         <div class="card-field">
           <span class="card-label">Estimate (PL)</span>
@@ -464,7 +464,7 @@ function renderTable(allRows){
     return `<tr>
       <td><span class="tbl-metric">${row.m}</span>${ulbl?`<span style="font-size:11px;color:var(--color-text-secondary,#888);margin-left:4px">(${ulbl})</span>`:''}${aiFilled[i]?'<span style="font-size:10px;color:#534AB7;margin-left:4px">AI</span>':''}</td>
       <td><input class="tbl-input${actual?' has-val':''}${aiClass}" id="tinp_${i}" type="number" value="${actual}" placeholder="Enter" step="any"
-        onchange="setActual(${i},this.value)"></td>
+        oninput="handleInput(${i},this)" onchange="handleInput(${i},this)"></td>
       <td class="tbl-est">${fmtVal(row.e,row.u)}</td>
       <td class="devpct" style="color:${devColor}">${devStr}</td>
       <td>${badge}</td>
@@ -472,10 +472,15 @@ function renderTable(allRows){
   }).join('');
 }
 
-function setActual(idx,val){
-  actuals[idx]=val;
-  aiFilled[idx]=false;
-  updateRowOnly(idx,val);
+function handleInput(idx, el){
+  const val = el.value;
+  actuals[idx] = val;
+  aiFilled[idx] = false;
+  // sync the sibling input (card↔table) without moving focus
+  const otherId = el.id.startsWith('cinp_') ? 'tinp_'+idx : 'cinp_'+idx;
+  const other = document.getElementById(otherId);
+  if(other && other !== document.activeElement) other.value = val;
+  updateRowOnly(idx, val);
 }
 
 function updateRowOnly(idx,val){
