@@ -121,9 +121,9 @@ td:first-child{text-align:left}
     <span class="qtr-badge">Jan–Mar 2026</span>
   </div>
   <div class="unit-btns">
-    <button class="unit-btn active" onclick="setUnit('Mn',this)">Mn</button>
+    <button class="unit-btn active" onclick="setUnit('Cr',this)">Cr</button>
+    <button class="unit-btn" onclick="setUnit('Mn',this)">Mn</button>
     <button class="unit-btn" onclick="setUnit('Bn',this)">Bn</button>
-    <button class="unit-btn" onclick="setUnit('Cr',this)">Cr</button>
   </div>
 </div>
 
@@ -308,7 +308,7 @@ const RAW={
   }
 };
 
-let unit='Mn',currentMetrics=[],actuals={},customRows=[],aiFilled={},pendingExtracted={};
+let unit='Cr',currentMetrics=[],actuals={},customRows=[],aiFilled={},pendingExtracted={};
 
 function setStatus(msg,type){
   const p=document.getElementById('statusPill');
