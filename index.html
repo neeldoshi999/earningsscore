@@ -58,7 +58,8 @@ select{flex:1;min-width:130px;padding:8px 10px;border:0.5px solid var(--color-bo
 .card-field{display:flex;flex-direction:column;gap:4px}
 .card-label{font-size:11px;color:var(--color-text-secondary,#666);text-transform:uppercase;letter-spacing:.4px}
 .card-est{font-size:15px;font-weight:500;color:var(--color-text-primary,#1a1a1a)}
-.actual-input{width:100%;padding:8px 10px;border:0.5px solid var(--color-border-secondary,#bbb);border-radius:8px;font-size:15px;background:var(--color-background-primary,#fff);color:var(--color-text-primary,#1a1a1a);-webkit-appearance:none}
+.actual-input{width:100%;padding:8px 10px;border:0.5px solid var(--color-border-secondary,#bbb);border-radius:8px;font-size:15px;background:var(--color-background-primary,#fff);color:var(--color-text-primary,#1a1a1a);-webkit-appearance:none;-moz-appearance:textfield}
+.actual-input::-webkit-outer-spin-button,.actual-input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 .actual-input:focus{outline:none;border-color:#378ADD;border-width:1.5px}
 .actual-input.has-val{border-color:#1D9E75}
 .actual-input.ai-filled{border-color:#8B7FDD;background:#EEEDFE22}
@@ -82,7 +83,8 @@ td{padding:10px 12px;text-align:right;font-size:13px;vertical-align:middle}
 td:first-child{text-align:left}
 .tbl-metric{font-weight:500}
 .tbl-est{color:var(--color-text-secondary,#666)}
-.tbl-input{width:100px;padding:5px 8px;border:0.5px solid var(--color-border-secondary,#bbb);border-radius:6px;font-size:13px;text-align:right;background:var(--color-background-primary,#fff);color:var(--color-text-primary,#1a1a1a)}
+.tbl-input{width:100px;padding:5px 8px;border:0.5px solid var(--color-border-secondary,#bbb);border-radius:6px;font-size:13px;text-align:right;background:var(--color-background-primary,#fff);color:var(--color-text-primary,#1a1a1a);-moz-appearance:textfield}
+.tbl-input::-webkit-outer-spin-button,.tbl-input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 .tbl-input:focus{outline:none;border-color:#378ADD}
 .tbl-input.has-val{border-color:#1D9E75}
 .tbl-input.ai-filled{border-color:#8B7FDD;background:#EEEDFE22}
@@ -433,7 +435,7 @@ function renderCards(allRows){
         <div class="card-field">
           <span class="card-label">Actual</span>
           <input class="actual-input${actual?' has-val':''}${aiClass}" id="cinp_${i}" type="number" inputmode="decimal" value="${actual}" placeholder="Enter" step="any"
-            onchange="setActual(${i},this.value)" oninput="setActual(${i},this.value)">
+            onchange="setActual(${i},this.value)">
         </div>
         <div class="card-field">
           <span class="card-label">Estimate (PL)</span>
@@ -462,7 +464,7 @@ function renderTable(allRows){
     return `<tr>
       <td><span class="tbl-metric">${row.m}</span>${ulbl?`<span style="font-size:11px;color:var(--color-text-secondary,#888);margin-left:4px">(${ulbl})</span>`:''}${aiFilled[i]?'<span style="font-size:10px;color:#534AB7;margin-left:4px">AI</span>':''}</td>
       <td><input class="tbl-input${actual?' has-val':''}${aiClass}" id="tinp_${i}" type="number" value="${actual}" placeholder="Enter" step="any"
-        onchange="setActual(${i},this.value)" oninput="setActual(${i},this.value)"></td>
+        onchange="setActual(${i},this.value)"></td>
       <td class="tbl-est">${fmtVal(row.e,row.u)}</td>
       <td class="devpct" style="color:${devColor}">${devStr}</td>
       <td>${badge}</td>
@@ -473,7 +475,39 @@ function renderTable(allRows){
 function setActual(idx,val){
   actuals[idx]=val;
   aiFilled[idx]=false;
-  render();
+  updateRowOnly(idx,val);
+}
+
+function updateRowOnly(idx,val){
+  const allRows=[...currentMetrics,...customRows];
+  const row=allRows[idx];
+  if(!row) return;
+  const dev=val!==''?calcDev(row.e,val,row.u):null;
+  const devStr=dev!==null?(dev>=0?'+':'')+dev.toFixed(2)+(row.u==='%'?' pp':'%'):'—';
+  const devColor=getDevColor(dev,row.u);
+  const badge=val!==''?getBadge(dev,row.u):'<span class="na">—</span>';
+  const hasVal=val!=='';
+  const aiClass=aiFilled[idx]?' ai-filled':'';
+  ['cinp_','tinp_'].forEach(pfx=>{
+    const inp=document.getElementById(pfx+idx);
+    if(!inp) return;
+    inp.classList.toggle('has-val',hasVal);
+    inp.classList.toggle('ai-filled',!!aiFilled[idx]);
+    const card=inp.closest('.metric-card');
+    if(card){
+      const footer=card.querySelector('.card-footer .devpct');
+      const badgeEl=card.querySelector('.card-header .badge,.card-header .na');
+      if(footer){footer.textContent=devStr;footer.style.color=devColor;}
+      if(badgeEl) badgeEl.outerHTML=badge;
+      else card.querySelector('.card-header').insertAdjacentHTML('beforeend',badge);
+    }
+    const tr=inp.closest('tr');
+    if(tr){
+      tr.children[3].textContent=devStr;
+      tr.children[3].style.color=devColor;
+      tr.children[4].innerHTML=badge;
+    }
+  });
 }
 
 function recalcAll(){render();}
